@@ -1,24 +1,37 @@
 name: CI/CD Pipeline
 
 on:
-  push:
-    branches:
-      - main
+push:
+branches:
+- main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+build-and-scan:
+runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+```
+steps:
+  # Step 1: Checkout code
+  - name: Checkout code
+    uses: actions/checkout@v3
 
-      - name: Build Docker image
-        run: docker build -t final_jury_image .
+  # Step 2: Build Docker image
+  - name: Build Docker Image
+    run: docker build -t final_jury_image:latest .
 
-      - name: Run Trivy scan
-        run: |
-          docker run --rm aquasec/trivy image final_jury_image
+  # Step 3: Install Trivy
+  - name: Install Trivy
+    run: |
+      sudo apt-get update
+      sudo apt-get install -y wget
+      wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.50.0_Linux-64bit.deb
+      sudo dpkg -i trivy_0.50.0_Linux-64bit.deb
 
-      - name: Print success
-        run: echo "Build and Scan Completed"
+  # Step 4: Scan Docker Image
+  - name: Scan Image with Trivy
+    run: trivy image final_jury_image:latest
+
+  # Step 5: Success message
+  - name: Done
+    run: echo "CI Pipeline Completed Successfully"
+```
