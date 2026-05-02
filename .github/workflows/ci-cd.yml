@@ -1,0 +1,24 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t final_jury_image .
+
+      - name: Run Trivy scan
+        run: |
+          docker run --rm aquasec/trivy image final_jury_image
+
+      - name: Print success
+        run: echo "Build and Scan Completed"
