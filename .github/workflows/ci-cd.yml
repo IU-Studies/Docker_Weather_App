@@ -9,7 +9,6 @@ jobs:
 build-and-scan:
 runs-on: ubuntu-latest
 
-```
 steps:
   # Step 1: Checkout code
   - name: Checkout code
@@ -34,4 +33,3 @@ steps:
   # Step 5: Success message
   - name: Done
     run: echo "CI Pipeline Completed Successfully"
-```
