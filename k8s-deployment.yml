@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: final-jury-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: final-jury
+  template:
+    metadata:
+      labels:
+        app: final-jury
+    spec:
+      containers:
+        - name: final-jury-container
+          image: mayurprojects/final_jury_image:1.6
+          ports:
+            - containerPort: 5000
+          env:
+            - name: GEO_API_URL
+              value: "https://geocoding-api.open-meteo.com/v1/search"
+            - name: WEATHER_API_URL
+              value: "https://api.open-meteo.com/v1/forecast"
